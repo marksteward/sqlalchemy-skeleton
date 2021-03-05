@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=main
+      - POSTGRES_PASSWORD=main
+      - POSTGRES_USER=main
+      - POSTGRES_HOST=db
+    volumes:
+      - ./pg-data:/var/lib/postgresql/data
+
+  main:
+    build:
+      context: app
+      dockerfile: Dockerfile
+    links:
+      - db
+    environment:
+      - LOG_LEVEL=debug
+      - DATABASE_URL=postgres://main:main@db:5432/main?sslmode=disable
+#    volumes:
+#      - ./app:/app:ro
+    command: sleep 1000000
+
